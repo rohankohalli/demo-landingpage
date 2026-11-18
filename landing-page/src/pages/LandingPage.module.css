@@ -1,0 +1,261 @@
+/* Skip link */
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 999;
+  background: var(--lime);
+  color: var(--navy);
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+.skipLink:focus {
+  left: 16px;
+}
+
+/* ── Hero ── */
+.hero {
+  padding-block: 100px 80px;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200, 255, 0, 0.07) 0%, transparent 70%),
+              var(--navy);
+  text-align: center;
+}
+
+.heroBadge {
+  display: block;
+  margin-bottom: 24px;
+}
+
+.heroHeading {
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.accent { color: var(--lime); }
+.br { display: block; }
+
+.heroSub {
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--text-body);
+  max-width: 620px;
+  margin-inline: auto;
+  line-height: 1.65;
+  margin-bottom: 36px;
+}
+
+.heroActions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.heroTrust {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.heroTrust strong { color: var(--text-body); }
+
+/* ── Pain Points ── */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.sectionHeader .eyebrow { display: block; margin-bottom: 12px; }
+.sectionHeader .section-title { margin: 0 auto; max-width: 640px; }
+
+.painSection { background: var(--navy-dark); }
+
+.painGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.painCard {
+  background: var(--navy-surface);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  transition: border-color 0.2s;
+}
+.painCard:hover { border-color: rgba(200, 255, 0, 0.3); }
+
+.painIcon {
+  color: var(--lime);
+  margin-bottom: 20px;
+}
+
+.painTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 10px;
+}
+
+.painBody {
+  font-size: 14px;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+/* ── How It Works ── */
+.howSection { background: var(--navy); }
+
+.stepsList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  counter-reset: steps;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 36px 32px;
+  background: var(--navy-surface);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+}
+
+.stepNum {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--lime);
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.stepTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 8px;
+}
+
+.stepBody {
+  font-size: 14px;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+/* ── Proof Block ── */
+.proofSection { background: var(--navy-dark); }
+
+.statsGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 48px;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 36px 28px;
+  background: var(--navy-surface);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.statValue {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--lime);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.statNote {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Case study callout inside proof block */
+.caseCallout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  background: var(--navy-surface);
+  border: 1px solid var(--navy-border);
+  border-left: 3px solid var(--lime);
+  border-radius: var(--radius);
+  padding: 36px 40px;
+  flex-wrap: wrap;
+}
+
+.caseCalloutContent { flex: 1; min-width: 260px; }
+.caseCalloutContent .eyebrow { display: block; margin-bottom: 10px; }
+
+.caseCalloutTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.caseCalloutBody {
+  font-size: 14px;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+/* ── FAQ ── */
+.faqSection { background: var(--navy); }
+
+/* ── Form Section ── */
+.formSection { background: var(--navy-dark); }
+
+.formWrapper {
+  max-width: 600px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.formSubhead {
+  font-size: 15px;
+  color: var(--text-body);
+  margin-top: 8px;
+  margin-bottom: 36px;
+  line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero { padding-block: 72px 56px; }
+  .painGrid { grid-template-columns: 1fr; }
+  .stepsList { grid-template-columns: 1fr; }
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .caseCallout { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 375px) {
+  .hero { padding-block: 48px 40px; }
+  .statsGrid { grid-template-columns: 1fr; }
+  .statValue { font-size: 36px; }
+  .stepNum { font-size: 36px; }
+}
