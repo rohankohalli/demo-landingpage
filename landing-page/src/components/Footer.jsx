@@ -9,19 +9,27 @@ export default function Footer() {
           <img
             src="/assests/LRM_Logo_Neon & White.png"
             alt="LionReach Media"
+            width="405"
             height="32"
-            width="auto"
+            loading="lazy"
+            decoding="async"
             className={styles.logo}
           />
           <p className={styles.tagline}>
-            Engineering verified, high-intent B2B pipelines across APAC.
+            Engineering verified, high-intent B2B sales pipelines across APAC.
           </p>
         </div>
 
         <nav aria-label="Footer navigation" className={styles.nav}>
-          <Link to="/" className={styles.link}>Overview</Link>
-          <Link to="/case-study" className={styles.link}>Case Study</Link>
-          <a href="/#faq" className={styles.link}>FAQ</a>
+          <Link to="/" className={styles.link}>
+            Overview
+          </Link>
+          <Link to="/case-study" className={styles.link}>
+            Case Study
+          </Link>
+          <a href="/#faq" className={styles.link}>
+            FAQ
+          </a>
         </nav>
 
         <div className={styles.offices}>

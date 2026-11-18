@@ -25,8 +25,10 @@ export default function Header() {
           <img
             src="/assests/LRM_Logo_Neon & White.png"
             alt="LionReach Media"
+            width="456"
             height="36"
-            width="auto"
+            fetchPriority="high"
+            decoding="async"
           />
         </Link>
 
@@ -37,7 +39,9 @@ export default function Header() {
           <NavLink
             to="/"
             end
-            className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}
+            className={({ isActive }) =>
+              isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
+            }
             onClick={() => setMenuOpen(false)}
           >
             Overview
@@ -51,7 +55,9 @@ export default function Header() {
           </a>
           <NavLink
             to="/case-study"
-            className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}
+            className={({ isActive }) =>
+              isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
+            }
             onClick={() => setMenuOpen(false)}
           >
             Case Study
@@ -74,7 +80,7 @@ export default function Header() {
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
           aria-controls="primary-nav"
-          onClick={() => setMenuOpen(o => !o)}
+          onClick={() => setMenuOpen((o) => !o)}
         >
           <span className={styles.bar} />
           <span className={styles.bar} />

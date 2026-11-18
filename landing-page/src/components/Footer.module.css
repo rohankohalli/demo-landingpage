@@ -12,7 +12,14 @@
   padding-bottom: 48px;
 }
 
-.logo { margin-bottom: 12px; }
+.logo {
+  height: 32px;
+  width: auto;
+  max-height: 32px;
+  aspect-ratio: 6082 / 480;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
 
 .tagline {
   font-size: 13px;

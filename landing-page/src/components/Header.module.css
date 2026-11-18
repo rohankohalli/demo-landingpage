@@ -18,6 +18,9 @@
 .logo img {
   height: 36px;
   width: auto;
+  max-height: 36px;
+  aspect-ratio: 6082 / 480;
+  object-fit: contain;
 }
 
 .nav {

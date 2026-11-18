@@ -45,7 +45,6 @@ export default function FAQ({ items }) {
             </dt>
             <dd
               id={id}
-              role="region"
               aria-labelledby={btnId}
               className={styles.answer}
               hidden={!isOpen}
