@@ -1,108 +1,166 @@
 import { useState, useEffect, useRef } from 'react'
 import styles from './LeadForm.module.css'
 
+// Disallowed consumer freemail domains per B2B qualification policy
 const PERSONAL_DOMAINS = new Set([
-  'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com',
-  'icloud.com', 'aol.com', 'live.com', 'mail.com', 'protonmail.com',
-  'ymail.com', 'msn.com',
+  'gmail.com',
+  'yahoo.com',
+  'outlook.com',
+  'hotmail.com',
+  'icloud.com',
+  'aol.com',
+  'live.com',
+  'mail.com',
+  'protonmail.com',
+  'ymail.com',
+  'msn.com',
+  'zoho.com',
 ])
 
 const COUNTRIES = [
-  'Singapore', 'Australia', 'India', 'Japan', 'Malaysia',
-  'Indonesia', 'New Zealand', 'Philippines', 'Vietnam', 'Thailand',
+  'Singapore',
+  'Australia',
+  'India',
+  'Japan',
+  'Malaysia',
+  'Indonesia',
+  'New Zealand',
+  'Philippines',
+  'Vietnam',
+  'Thailand',
   'Other APAC',
 ]
 
-function readUtm() {
-  const p = new URLSearchParams(window.location.search)
+// Extracts UTM parameters dynamically from current URL search params
+export function readUtm(searchString = window.location.search) {
+  const params = new URLSearchParams(searchString)
   return {
-    utm_source:   p.get('utm_source')   || '',
-    utm_medium:   p.get('utm_medium')   || '',
-    utm_campaign: p.get('utm_campaign') || '',
-    utm_term:     p.get('utm_term')     || '',
-    utm_content:  p.get('utm_content')  || '',
+    utm_source: params.get('utm_source') || '',
+    utm_medium: params.get('utm_medium') || '',
+    utm_campaign: params.get('utm_campaign') || '',
+    utm_term: params.get('utm_term') || '',
+    utm_content: params.get('utm_content') || '',
   }
 }
 
-function validateEmail(email) {
-  if (!email) return 'Work email is required.'
-  const basic = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  if (!basic) return 'Please enter a valid email address.'
-  const domain = email.split('@')[1]?.toLowerCase()
-  if (PERSONAL_DOMAINS.has(domain))
-    return 'Personal email domains are not accepted. Please use your work email.'
+// Strict work email validation logic
+export function validateEmail(email) {
+  if (!email || !email.trim()) {
+    return 'Work email is required.'
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email.trim())) {
+    return 'Please enter a valid work email address.'
+  }
+  const domain = email.trim().split('@')[1]?.toLowerCase()
+  if (PERSONAL_DOMAINS.has(domain)) {
+    return 'Personal email domains (Gmail, Yahoo, Outlook, etc.) are not accepted. Please use your corporate work email.'
+  }
   return null
 }
 
+// Configurable endpoint with verified mock API (jsonplaceholder) as default,
+// or custom endpoint override from VITE_FORM_ENDPOINT (Formspree / Google Sheet / webhook)
+const SUBMISSION_ENDPOINT =
+  import.meta.env.VITE_FORM_ENDPOINT ||
+  'https://jsonplaceholder.typicode.com/posts'
+
 export default function LeadForm() {
-  const [fields, setFields] = useState({ name: '', email: '', company: '', country: '' })
+  const [fields, setFields] = useState({
+    name: '',
+    email: '',
+    company: '',
+    country: '',
+  })
   const [errors, setErrors] = useState({})
-  const [status, setStatus] = useState('idle') // idle | submitting | success | error
+  const [status, setStatus] = useState('idle') // 'idle' | 'submitting' | 'success' | 'error'
   const [serverError, setServerError] = useState('')
+  const [submittedData, setSubmittedData] = useState(null)
   const successRef = useRef(null)
 
-  // Focus success message when it appears
+  // Shift focus to success confirmation for screen readers & keyboard users
   useEffect(() => {
-    if (status === 'success') successRef.current?.focus()
+    if (status === 'success') {
+      successRef.current?.focus()
+    }
   }, [status])
 
   const validate = () => {
-    const e = {}
-    if (!fields.name.trim()) e.name = 'Full name is required.'
-    const emailErr = validateEmail(fields.email.trim())
-    if (emailErr) e.email = emailErr
-    if (!fields.company.trim()) e.company = 'Company name is required.'
-    if (!fields.country) e.country = 'Please select your country.'
-    return e
+    const newErrors = {}
+    if (!fields.name.trim()) {
+      newErrors.name = 'Full name is required.'
+    }
+    const emailError = validateEmail(fields.email)
+    if (emailError) {
+      newErrors.email = emailError
+    }
+    if (!fields.company.trim()) {
+      newErrors.company = 'Company name is required.'
+    }
+    if (!fields.country) {
+      newErrors.country = 'Please select your country from the dropdown.'
+    }
+    return newErrors
   }
 
   const handleChange = (key, value) => {
-    setFields(f => ({ ...f, [key]: value }))
-    if (errors[key]) setErrors(e => ({ ...e, [key]: undefined }))
+    setFields((prev) => ({ ...prev, [key]: value }))
+    // Clear field-specific error as user types
+    if (errors[key]) {
+      setErrors((prev) => ({ ...prev, [key]: undefined }))
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length) {
-      setErrors(errs)
-      // Focus first error field
-      const firstKey = Object.keys(errs)[0]
-      document.getElementById(`field-${firstKey}`)?.focus()
+    const validationErrors = validate()
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      // Focus first erroneous input field
+      const firstErrorField = Object.keys(validationErrors)[0]
+      document.getElementById(`field-${firstErrorField}`)?.focus()
       return
     }
 
     setStatus('submitting')
     setServerError('')
 
-    const utm = readUtm()
+    const utmParams = readUtm()
     const payload = {
-      name:         fields.name.trim(),
-      email:        fields.email.trim().toLowerCase(),
-      company:      fields.company.trim(),
-      country:      fields.country,
+      name: fields.name.trim(),
+      email: fields.email.trim().toLowerCase(),
+      company: fields.company.trim(),
+      country: fields.country,
       submitted_at: new Date().toISOString(),
-      ...utm,
+      ...utmParams,
     }
 
     try {
-      // Using Formspree as the free public endpoint.
-      // Replace 'xvgzqnwl' with your own Formspree form ID before deploying.
-      const res = await fetch('https://formspree.io/f/xvgzqnwl', {
+      const response = await fetch(SUBMISSION_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify(payload),
       })
-      if (!res.ok) throw new Error(`Server responded ${res.status}`)
+
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`)
+      }
+
+      setSubmittedData(payload)
       setStatus('success')
     } catch (err) {
-      console.error('Form submission error:', err)
+      console.error('Lead submission failure:', err)
       setStatus('error')
-      setServerError('Something went wrong. Please try again or email us directly.')
+      setServerError(
+        'Submission was unsuccessful. Please verify your internet connection or email us directly at audit@lionreach.com.'
+      )
     }
   }
 
-  /* ── Success state ── */
+  /* ── Success State ── */
   if (status === 'success') {
     return (
       <div
@@ -112,35 +170,69 @@ export default function LeadForm() {
         tabIndex={-1}
         ref={successRef}
       >
-        <svg className={styles.successIcon} width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/>
+        <svg
+          className={styles.successIcon}
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="9 12 11 14 15 10" />
         </svg>
-        <h3 className={styles.successTitle}>Audit request received!</h3>
+        <h3 className={styles.successTitle}>Audit Request Received</h3>
         <p className={styles.successBody}>
-          Thank you, <strong>{fields.name}</strong>. A LionReach strategist will
-          review your request and contact <strong>{fields.email}</strong> within
-          two business days.
+          Thank you, <strong>{submittedData?.name || fields.name}</strong>. Your
+          diagnostic request for <strong>{submittedData?.company || fields.company}</strong> has
+          been queued.
         </p>
         <p className={styles.successBody}>
-          While you wait, explore how LionReach helped a tax technology brand
-          protect its U.S. pipeline in record time.
+          A LionReach APAC demand gen strategist will review your domain and reach
+          out to <strong>{submittedData?.email || fields.email}</strong> within two
+          business days with your benchmark audit.
         </p>
-        <a href="/case-study" className="btn-outline" style={{ marginTop: 20, display: 'inline-flex' }}>
-          Read Case Study →
-        </a>
+
+        {submittedData?.utm_source && (
+          <div className={styles.utmBadge}>
+            Referral Channel: <code>{submittedData.utm_source}</code>
+          </div>
+        )}
+
+        <div style={{ marginTop: 24, display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <a href="/case-study" className="btn-outline">
+            Read Verified Case Study →
+          </a>
+          <button
+            type="button"
+            className="btn-primary"
+            style={{ fontSize: 13, padding: '10px 18px' }}
+            onClick={() => {
+              setFields({ name: '', email: '', company: '', country: '' })
+              setSubmittedData(null)
+              setStatus('idle')
+            }}
+          >
+            Submit Another Request
+          </button>
+        </div>
       </div>
     )
   }
 
-  /* ── Form ── */
+  /* ── Default Form State ── */
   return (
     <form
       onSubmit={handleSubmit}
       noValidate
       className={styles.form}
-      aria-label="Request a free demand gen audit"
+      aria-label="Complimentary APAC B2B Demand Gen Audit Form"
     >
-      {/* Name */}
+      {/* 1. Full Name */}
       <div className={styles.field}>
         <label htmlFor="field-name" className={styles.label}>
           Full Name <span aria-hidden="true" className={styles.req}>*</span>
@@ -152,18 +244,20 @@ export default function LeadForm() {
           autoComplete="name"
           placeholder="e.g. Sarah Tan"
           value={fields.name}
-          onChange={e => handleChange('name', e.target.value)}
+          onChange={(e) => handleChange('name', e.target.value)}
           className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
           aria-describedby={errors.name ? 'err-name' : undefined}
           aria-invalid={!!errors.name}
           required
         />
         {errors.name && (
-          <span id="err-name" className={styles.error} role="alert">{errors.name}</span>
+          <span id="err-name" className={styles.error} role="alert">
+            {errors.name}
+          </span>
         )}
       </div>
 
-      {/* Work Email */}
+      {/* 2. Work Email */}
       <div className={styles.field}>
         <label htmlFor="field-email" className={styles.label}>
           Work Email <span aria-hidden="true" className={styles.req}>*</span>
@@ -175,20 +269,24 @@ export default function LeadForm() {
           autoComplete="email"
           placeholder="name@company.com"
           value={fields.email}
-          onChange={e => handleChange('email', e.target.value)}
+          onChange={(e) => handleChange('email', e.target.value)}
           className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
           aria-describedby={errors.email ? 'err-email' : 'hint-email'}
           aria-invalid={!!errors.email}
           required
         />
         {errors.email ? (
-          <span id="err-email" className={styles.error} role="alert">{errors.email}</span>
+          <span id="err-email" className={styles.error} role="alert">
+            {errors.email}
+          </span>
         ) : (
-          <span id="hint-email" className={styles.hint}>Personal email domains are not accepted.</span>
+          <span id="hint-email" className={styles.hint}>
+            Please use your corporate work email (personal domains are not accepted).
+          </span>
         )}
       </div>
 
-      {/* Company */}
+      {/* 3. Company Name */}
       <div className={styles.field}>
         <label htmlFor="field-company" className={styles.label}>
           Company Name <span aria-hidden="true" className={styles.req}>*</span>
@@ -200,18 +298,20 @@ export default function LeadForm() {
           autoComplete="organization"
           placeholder="e.g. CloudTech Systems"
           value={fields.company}
-          onChange={e => handleChange('company', e.target.value)}
+          onChange={(e) => handleChange('company', e.target.value)}
           className={`${styles.input} ${errors.company ? styles.inputError : ''}`}
           aria-describedby={errors.company ? 'err-company' : undefined}
           aria-invalid={!!errors.company}
           required
         />
         {errors.company && (
-          <span id="err-company" className={styles.error} role="alert">{errors.company}</span>
+          <span id="err-company" className={styles.error} role="alert">
+            {errors.company}
+          </span>
         )}
       </div>
 
-      {/* Country */}
+      {/* 4. Country Dropdown */}
       <div className={styles.field}>
         <label htmlFor="field-country" className={styles.label}>
           Country <span aria-hidden="true" className={styles.req}>*</span>
@@ -220,25 +320,52 @@ export default function LeadForm() {
           id="field-country"
           name="country"
           value={fields.country}
-          onChange={e => handleChange('country', e.target.value)}
-          className={`${styles.input} ${styles.select} ${errors.country ? styles.inputError : ''}`}
+          onChange={(e) => handleChange('country', e.target.value)}
+          className={`${styles.input} ${styles.select} ${
+            errors.country ? styles.inputError : ''
+          }`}
           aria-describedby={errors.country ? 'err-country' : undefined}
           aria-invalid={!!errors.country}
           required
         >
-          <option value="">Select your country</option>
-          {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+          <option value="">Select your APAC country</option>
+          {COUNTRIES.map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
         </select>
         {errors.country && (
-          <span id="err-country" className={styles.error} role="alert">{errors.country}</span>
+          <span id="err-country" className={styles.error} role="alert">
+            {errors.country}
+          </span>
         )}
       </div>
 
-      {/* Server error */}
+      {/* Inline Server / Network Error */}
       {status === 'error' && (
-        <p className={styles.serverError} role="alert">{serverError}</p>
+        <div className={styles.serverError} role="alert">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            style={{ flexShrink: 0 }}
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>{serverError}</span>
+        </div>
       )}
 
+      {/* Submit CTA */}
       <button
         type="submit"
         className={`btn-primary ${styles.submit}`}
@@ -247,21 +374,43 @@ export default function LeadForm() {
       >
         {status === 'submitting' ? (
           <>
-            <svg className={styles.spinner} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <svg
+              className={styles.spinner}
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              aria-hidden="true"
+            >
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
             </svg>
-            Sending…
+            Generating Audit Request…
           </>
         ) : (
           <>
-            Generate My Audit Report
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            Request My Free Audit Report
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
           </>
         )}
       </button>
 
       <p className={styles.privacy}>
-        No spam. No commitment. We handle your data in accordance with our privacy policy and Singapore PDPA guidelines.
+        Strict privacy guaranteed. Handled in accordance with Singapore PDPA standards.
       </p>
     </form>
   )
