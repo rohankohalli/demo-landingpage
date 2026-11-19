@@ -1,0 +1,34 @@
+name: Weekly Lead Cleaning & Automation
+
+on:
+  schedule:
+    # Runs every Monday at 08:00 UTC (16:00 SGT / 13:30 IST)
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  clean-leads:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Lead Cleaning Pipeline
+        run: |
+          python automation/clean_leads.py automation/leads_sample.csv automation/
+
+      - name: Upload Cleaned Leads Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-cleaned-leads
+          path: |
+            automation/leads_clean.csv
+            automation/leads_rejected_audit.csv
+            automation/slack_message.txt
+            automation/email_summary.txt

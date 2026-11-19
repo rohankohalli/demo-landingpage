@@ -1,0 +1,55 @@
+Subject: [Weekly Leads] APAC B2B Demand Gen Campaign Summary - 26 New Qualified Leads
+
+Hi Sales Team,
+
+Here is your cleaned and verified inbound lead summary for this week's APAC B2B Demand Gen campaign.
+
+EXECUTIVE SUMMARY:
+-----------------------------------------------------------
+Total Inbound Submissions:    37
+Clean Qualified Leads:        26 (70.3% qualification rate)
+Disqualified / Removed:       11
+
+DISQUALIFICATION BREAKDOWN:
+-----------------------------------------------------------
+- Duplicate email                       : 5
+- Personal email domain rejected        : 4
+- Invalid email format                  : 1
+- Test submission identified            : 1
+
+LEAD BREAKDOWN BY REGION:
+-----------------------------------------------------------
+- Japan               : 7 leads (26.9%)
+- Malaysia            : 5 leads (19.2%)
+- Singapore           : 5 leads (19.2%)
+- Australia           : 5 leads (19.2%)
+- India               : 3 leads (11.5%)
+- Indonesia           : 1 leads (3.8%)
+
+LEAD BREAKDOWN BY CHANNEL SOURCE:
+-----------------------------------------------------------
+- LinkedIn            : 12 leads (46.2%)
+- Direct              : 6 leads (23.1%)
+- Direct / None       : 3 leads (11.5%)
+- Newsletter          : 3 leads (11.5%)
+- Google              : 2 leads (7.7%)
+
+TOP TARGET INDUSTRIES:
+-----------------------------------------------------------
+- Enterprise IT & Automation      : 4
+- Developer Tools & Observability : 4
+- Cloud & Enterprise SaaS         : 4
+- Big Data & Business Intelligence: 3
+- Financial Technology (FinTech)  : 3
+- Cloud Infrastructure & DevOps   : 2
+- Cybersecurity & Storage         : 2
+- Aerospace & SatTech             : 2
+- AI & Enterprise Software        : 1
+- Algorithmic & DeepTech          : 1
+
+ATTACHMENTS:
+- leads_clean.csv (Uploaded to CRM queue)
+- leads_rejected_audit.csv (Audit trail for verification)
+
+Best regards,
+LionReach Marketing Operations Automation

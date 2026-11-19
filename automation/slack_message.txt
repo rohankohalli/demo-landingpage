@@ -1,0 +1,32 @@
+*🚀 Weekly Campaign Lead Summary | LionReach Media*
+*Date:* Thursday, 19 November 2026
+*Campaign:* APAC Tech B2B Demand Gen Audit
+
+*📊 High-Level Metrics:*
+• *Total Submissions:* `37`
+• *Qualified Leads (Clean):* `26` (70.3%)
+• *Disqualified / Removed:* `11`
+
+*🚫 Removal Breakdown:*
+• Duplicate email: `5`
+• Personal email domain rejected: `4`
+• Invalid email format: `1`
+• Test submission identified: `1`
+
+*🌏 Qualified Leads by Country:*
+• *Japan:* `7` leads
+• *Malaysia:* `5` leads
+• *Singapore:* `5` leads
+• *Australia:* `5` leads
+• *India:* `3` leads
+• *Indonesia:* `1` leads
+
+*🎯 Leads by Acquisition Source (UTM):*
+• *LinkedIn:* `12`
+• *Direct:* `6`
+• *Direct / None:* `3`
+• *Newsletter:* `3`
+• *Google:* `2`
+
+📁 *Clean Lead File:* `D:\workspace\2page-LandingPage\automation\leads_clean.csv`
+👉 Leads are verified and ready for sales routing.

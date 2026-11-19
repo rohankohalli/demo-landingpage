@@ -1,0 +1,12 @@
+row_number,submitted_at,full_name,email,company,reason
+8,2026-11-06 14:40,Sam,sam@,Unknown,Invalid email format (missing domain or TLD)
+13,2026-11-01 17:37,Siti Rahman,siti.rahman@gmail.com,CloudPeak,Personal email domain rejected (@gmail.com)
+15,2026-11-04 10:12,Test User,test@test.com,Test,Test submission identified
+17,2026-11-07 16:17,Ryan Lee,ryan.lee@yahoo.com,Quantica,Personal email domain rejected (@yahoo.com)
+28,2026-11-03 16:06,Chloe Wong,chloe.wong@gmail.com,CloudPeak,Personal email domain rejected (@gmail.com)
+37,2026-11-09 14:10,lucas ng,lucas.ng@gmail.com,Lumen Systems,Personal email domain rejected (@gmail.com)
+1,2026-11-02 20:59,Mei Ling,mei.ling@zentrix.com,Zentrix,Duplicate email (retained earliest from 2026-11-02 20:35)
+4,2026-11-02 10:59,Ethan Chua,ethan.chua@byteharbor.com,ByteHarbor,Duplicate email (retained earliest from 2026-11-02 10:06)
+9,2026-11-06 12:59,Kenji Ito,kenji.ito@lumensystems.com,Lumen Systems,Duplicate email (retained earliest from 2026-11-06 12:15)
+34,2026-11-07 15:59,Aisha Khan,aisha.khan@finlytic.com,Finlytic,Duplicate email (retained earliest from 2026-11-07 15:05)
+32,2026-11-09 08:59,Leo Fernandes,leo.fernandes@datanest.com,DataNest,Duplicate email (retained earliest from 2026-11-09 08:48)

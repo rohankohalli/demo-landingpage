@@ -6,12 +6,8 @@ import {
 } from '../utils/formValidation'
 import styles from './LeadForm.module.css'
 
-// Configurable endpoint with verified mock API (jsonplaceholder) as default,
-// or custom endpoint override from VITE_FORM_ENDPOINT (Formspree / Google Sheet / webhook)
 const SUBMISSION_ENDPOINT =
-  import.meta.env.VITE_FORM_ENDPOINT ||
-  'https://jsonplaceholder.typicode.com/posts'
-
+  import.meta.env.VITE_FORM_ENDPOINT || 'https://formspree.io/f/xkjrbeja'
 export default function LeadForm() {
   const [fields, setFields] = useState({
     name: '',
@@ -268,9 +264,8 @@ export default function LeadForm() {
           name="country"
           value={fields.country}
           onChange={(e) => handleChange('country', e.target.value)}
-          className={`${styles.input} ${styles.select} ${
-            errors.country ? styles.inputError : ''
-          }`}
+          className={`${styles.input} ${styles.select} ${errors.country ? styles.inputError : ''
+            }`}
           aria-describedby={errors.country ? 'err-country' : undefined}
           aria-invalid={!!errors.country}
           required
