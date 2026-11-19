@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+landing-page/node_modules/
+
+# Production build
+dist/
+landing-page/dist/
+
+# Logs & temp
+*.log
+npm-debug.log*
+.DS_Store
+*.local
+
+# Environment variables
+.env
+landing-page/.env
+
+# Internal assessment planning & submission drafts (kept local)
+planning/
+landing-page/planning/
+SUBMISSION.md
