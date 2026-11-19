@@ -28,7 +28,7 @@ Built with **React 19**, **Vite 8**, and **React Router DOM v7** using a shared 
 
 * **Framework:** React 19 + Vite 8
 * **Routing:** React Router DOM v7 (`React.lazy` code splitting with `<Suspense>`)
-* **Styling:** CSS Modules with CSS Custom Properties
+* **Styling:** CSS with CSS Custom Properties
 * **Design Tokens:**
   * Background / Dominant: Deep Navy (`#041221`, `--navy`)
   * Surface / Cards: Dark Navy Surface (`#0A1F36`, `--navy-surface`)
